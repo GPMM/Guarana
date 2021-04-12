@@ -108,4 +108,39 @@ public class RestClient : MonoBehaviour
             }
         }
     }
+
+    public IEnumerator Post(string url, System.Action<EventList> callBack, Event newEvent)
+    {
+
+        string jsonData = JsonUtility.ToJson(newEvent);
+
+        Debug.Log(jsonData);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
+        {
+
+            www.SetRequestHeader("content-type", "application/json");
+            www.uploadHandler.contentType = "application/json";
+            www.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+
+            yield return www.SendWebRequest();
+
+            if (www.result == UnityWebRequest.Result.ConnectionError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+
+                if (www.isDone)
+                {
+                    string data = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+
+                    Debug.Log("Event: " + data);
+
+                    //  callBack(Legendas);
+                }
+            }
+        }
+    }
 }

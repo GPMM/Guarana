@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerList : MonoBehaviour
+public class PlayerList
 {
     public List<Player> Players;
 }
